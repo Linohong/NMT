@@ -1,0 +1,11 @@
+Process of dataProcess directory
+
+1. main.py : first call (dataProcess.DataProcess) from main.py
+
+2. DataProcess.py : prepares data to be ready calling below two files and returns the
+                    prepared data of two languages with Lang object and Lang pairs
+    3. readLangs.py : Read every line of data file
+        - Unicode2Ascii.py : just as filename
+        - Lang.py : returns Lang object which has data information of data for each language
+
+    4. filterPair.py : This file extracts only the trimmed data of raw data which start with specific phrases.
