@@ -11,6 +11,8 @@ def prepareData(lang1, lang2, reverse=False) :
     print("Read %s sentence pairs" % len(pairs))
     pairs = FP.filterPairs(pairs)
     print("Trimmed to %s sentence pairs" % len(pairs))
+    if Args.args.train_size > len(pairs) :
+        Args.args.train_size = len(pairs)
     print("Counting Words...")
     for pair in pairs :
         input_lang.addSentence(pair[0])

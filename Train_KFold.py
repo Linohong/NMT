@@ -4,6 +4,7 @@ import torch.optim as optim
 import Network
 import torch.nn as nn
 import time
+import random
 import dataProcess.DataProcess as D
 import peripheralTools as PT
 import Arguments as Args
@@ -50,7 +51,7 @@ def Train(input_sent, target_sent, EncNet, DecNet, enc_optim, dec_optim, criteri
 
     return loss.data[0] / target_length
 
-def TrainIters(input_lang, output_lang, EncNet, DecNet, pairs, trainSize, print_every=1000, epoch_size=10, batch_size=50, lr=0.02) :
+def TrainIters(train_index, training_pairs, EncNet, DecNet, trainSize, print_every=1000, epoch_size=10, batch_size=50, lr=0.02) :
     start = time.time()
     plot_losses = []
     print_loss_total = 0
@@ -58,11 +59,11 @@ def TrainIters(input_lang, output_lang, EncNet, DecNet, pairs, trainSize, print_
 
     encoder_optimizer = optim.SGD(EncNet.parameters(), lr=lr)
     decoder_optimizer = optim.SGD(DecNet.parameters(), lr=lr)
-    training_pairs = [D.variablesFromPair(input_lang, output_lang, random.choice(pairs)) for i in range(trainSize)] # check if repetition exists
     criterion = nn.NLLLoss()
 
-    for iter in range(1, trainSize + 1) :
-        training_pair = training_pairs[iter-1]
+    iter_time = 1
+    for iter in train_index :
+        training_pair = training_pairs[iter]
         input_sent_variable = training_pair[0] # Variable of indexes of input sentence
         target_sent_variable = training_pair[1] # Variable of indexes of target sentence
 
@@ -70,9 +71,9 @@ def TrainIters(input_lang, output_lang, EncNet, DecNet, pairs, trainSize, print_
         print_loss_total += loss
         plot_loss_total += loss
 
-        if iter % print_every == 0 :
-            print_loss_avg = print_loss_total / print_every
-            print_loss_total = 0
-            print('%s (%d %d%%) %.4f' % (PT.timeSince(start, float(iter)/trainSize), iter, iter/trainSize * 100, print_loss_avg ))
+        iter_time = iter_time + 1
+
+    print_loss_avg = print_loss_total/trainSize
+    print('%s (%d itered) %.4f' % (PT.timeSince(start, float(iter_time)/trainSize), iter_time, print_loss_avg ))
 
 

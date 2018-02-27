@@ -12,7 +12,7 @@ eng_prefixes = (
 def filterPair(p) : # boolean return
     return len(p[0].split(' ')) < Args.args.max_sent and \
         len(p[1].split(' ')) < Args.args.max_sent and \
-        p[1].startswith(eng_prefixes)
+        p[0].startswith(eng_prefixes)
 
 def filterPairs(pairs) :
     return [pair for pair in pairs if filterPair(pair)]
